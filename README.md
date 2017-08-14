@@ -1,2 +1,3 @@
 # wagtail-netlify
-Wagtail &lt;3 Netlify
+
+Utilities for getting Wagtail sites on Netlify.
