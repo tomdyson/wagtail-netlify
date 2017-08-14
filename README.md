@@ -1,6 +1,10 @@
 # wagtail-netlify
 
-Deploy your Wagtail site on Netlify, automatically.
+Deploy your Wagtail site on Netlify. Features include:
+
+ - automatic deployment when pages are published
+ - a new `netlify` management command
+ - conversion of Wagtail redirects to Netlify's format
 
 ## Install
 
@@ -17,7 +21,7 @@ Deploy your Wagtail site on Netlify, automatically.
 
 ## Usage
 
-1. If you haven't set `NETLIFY_AUTO_DEPLOY = False`, Wagtail will automatically publish your site every time a page is published. This make take between a few seconds and a few minutes, depending on the size of your site, and the number of pages which are affected by your change.
+1. If you haven't set `NETLIFY_AUTO_DEPLOY = False`, Wagtail will automatically deploy your site every time a page is published. This make take between a few seconds and a few minutes, depending on the size of your site, and the number of pages which are affected by your change.
 2. To deploy changes manually, use `./manage.py netlify`
 
 ## Todo
