@@ -3,6 +3,7 @@ import subprocess
 from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
 from wagtail.wagtailredirects.models import Redirect
+from wagtailnetlify.models import Deployment
 
 
 class Command(BaseCommand):
@@ -31,6 +32,8 @@ class Command(BaseCommand):
         # Deploy the contents of BUILD_DIR to Netlify, using site ID if available
         if not hasattr(settings,'NETLIFY_PATH'):
             raise CommandError('NETLIFY_PATH is not defined in settings')
+        deployment = Deployment()
+        deployment.save()
         netlify_cli = settings.NETLIFY_PATH
         command = [netlify_cli, 'deploy', '-p', settings.BUILD_DIR]
         if hasattr(settings, 'NETLIFY_SITE_ID'):

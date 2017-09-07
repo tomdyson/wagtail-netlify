@@ -1,8 +1,17 @@
 from threading import Thread
+from django.db import models
 from django.core.management import call_command
 from django.db import connection
 from django.conf import settings
 from wagtail.wagtailcore.signals import page_published
+
+
+class Deployment(models.Model):
+    netlify_id = models.CharField(max_length=30, null=True)
+    url = models.URLField(null=True)
+    deployment_url = models.URLField(null=True)
+    datetime_started = models.DateTimeField(auto_now_add=True, help_text='deployment started')
+    datetime_finished = models.DateTimeField('deployment completed', null=True)
 
 
 def postpone(function):
