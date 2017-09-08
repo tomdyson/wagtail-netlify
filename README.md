@@ -28,7 +28,7 @@ Deploy your Wagtail site on Netlify. Features include:
 ## Optional admin view
 
 Netlify can send a webhook after a successful deployment. This app provides an endpoint for that webhook and an admin view of 
-completed deployments. To enable this view, update your project's `urls.py`:
+completed deployments. To enable this view, add 'wagtail.contrib.modeladmin' to your `INSTALLED_APPS` and update your project's `urls.py`:
 
 ```python
 from wagtailnetlify import views as netlify_views
@@ -42,6 +42,7 @@ In Netlify's admin interface for your app, add http://yourdomain/netlify/success
 
 ## Todo
 
-- [ ] Provide an admin view for reporting on deployments
+- [x] Provide an admin view for reporting on deployments
+- [ ] Allow adminstrators to trigger deploys manually
 - [ ] Allow developers to replace `Threading` with Celery or similar, for more robust async behaviour.
 - [ ] Tests
