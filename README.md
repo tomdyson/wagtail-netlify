@@ -14,7 +14,7 @@ Deploy your Wagtail site on Netlify. Features include:
 
 ## Configure
 
-1. Add `'wagtailnetlify'` to your INSTALLED_APPS
+1. Add `'wagtailnetlify'` to your `INSTALLED_APPS`
 2. Run the migrations: `./manage.py migrate wagtailnetlify`
 3. Add `NETLIFY_PATH` to your settings (hint: type `which netlify` to check the location)
 4. If you are deploying to an existing Netlify site, provide its ID with `NETLIFY_SITE_ID = 'your-id-here'`
@@ -28,13 +28,13 @@ Deploy your Wagtail site on Netlify. Features include:
 ## Optional admin view
 
 Netlify can send a webhook after a successful deployment. This app provides an endpoint for that webhook and an admin view of 
-completed deployments. To enable this view, add 'wagtail.contrib.modeladmin' to your `INSTALLED_APPS` and update your project's `urls.py`:
+completed deployments. To enable this view, add `'wagtail.contrib.modeladmin'` to your `INSTALLED_APPS` and update your project's `urls.py`:
 
 ```python
+# in your imports
 from wagtailnetlify import views as netlify_views
 
 # in urlpatterns, before including wagtail_urls
-
 url(r'^netlify/', netlify_views.success_hook, name='netlify'),
 ```
 
