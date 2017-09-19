@@ -5,6 +5,8 @@ Deploy your Wagtail site on Netlify. Features include:
  - automatic deployment when pages are published
  - a new `netlify` management command
  - conversion of Wagtail redirects to Netlify's format
+ 
+![Screencast demo](https://tom.s3.amazonaws.com/wagtail-netlify.gif)
 
 ## Install
 
