@@ -7,7 +7,7 @@ from wagtailnetlify.models import Deployment
 
 
 class Command(BaseCommand):
-    
+
     help = 'Deploys your baked Wagtail site to Netlify'
 
     def build_redirects(self):
@@ -32,12 +32,17 @@ class Command(BaseCommand):
         # Deploy the contents of BUILD_DIR to Netlify, using site ID if available
         if not hasattr(settings,'NETLIFY_PATH'):
             raise CommandError('NETLIFY_PATH is not defined in settings')
+
         deployment = Deployment()
         deployment.save()
+
         netlify_cli = settings.NETLIFY_PATH
         command = [netlify_cli, 'deploy', '-p', settings.BUILD_DIR]
         if hasattr(settings, 'NETLIFY_SITE_ID'):
             command.extend(['-s', settings.NETLIFY_SITE_ID])
+        token = getattr(settings, 'NETLIFY_API_TOKEN', None)
+        if token:
+            command.extend(['-t', token])
         subprocess.call(command)
 
     def handle(self, *args, **options):

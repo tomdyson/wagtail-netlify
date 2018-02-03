@@ -5,7 +5,7 @@ Deploy your Wagtail site on Netlify. Features include:
  - automatic deployment when pages are published
  - a new `netlify` management command
  - conversion of Wagtail redirects to Netlify's format
- 
+
 ![Screencast demo](https://tom.s3.amazonaws.com/wagtail-netlify.gif)
 
 ## Install
@@ -16,11 +16,15 @@ Deploy your Wagtail site on Netlify. Features include:
 
 ## Configure
 
+### Mandatory
 1. Add `'wagtailnetlify'` to your `INSTALLED_APPS`
 2. Run the migrations: `./manage.py migrate wagtailnetlify`
 3. Add `NETLIFY_PATH` to your settings (hint: type `which netlify` to check the location)
-4. If you are deploying to an existing Netlify site, provide its ID with `NETLIFY_SITE_ID = 'your-id-here'`
-5. If you don't want Wagtail to deploy your site to Netlify every time you publish a page, set `NETLIFY_AUTO_DEPLOY = False`
+
+### Optional
+- If you are deploying to an existing Netlify site, provide its ID with `NETLIFY_SITE_ID = 'your-id-here'`
+- If you don't want Wagtail to deploy your site to Netlify every time you publish a page, set `NETLIFY_AUTO_DEPLOY = False`
+- If you don't want to or are unable to click the Netlify authentication link in the console, [generate a token](https://app.netlify.com/account/applications) manually and set `NETLIFY_API_TOKEN = 'your-token-here'` in your settings. *Warning: You should never check credentials in your version control system. Use [environment variables](https://django-environ.readthedocs.io/en/latest/) or [local settings file](http://techstream.org/Bits/Local-Settings-in-django) instead.*
 
 ## Usage
 
@@ -29,7 +33,7 @@ Deploy your Wagtail site on Netlify. Features include:
 
 ## Optional admin view
 
-Netlify can send a webhook after a successful deployment. This app provides an endpoint for that webhook and an admin view of 
+Netlify can send a webhook after a successful deployment. This app provides an endpoint for that webhook and an admin view of
 completed deployments. To enable this view, add `'wagtail.contrib.modeladmin'` to your `INSTALLED_APPS` and update your project's `urls.py`:
 
 ```python
