@@ -2,8 +2,12 @@ import os
 import subprocess
 from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
-from wagtail.wagtailredirects.models import Redirect
 from wagtailnetlify.models import Deployment
+
+try:
+    from wagtail.contrib.redirects.models import Redirect
+except ImportError:  # Wagtail < 2.0
+    from wagtail.wagtailredirects.models import Redirect
 
 
 class Command(BaseCommand):

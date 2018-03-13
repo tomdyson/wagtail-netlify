@@ -3,7 +3,11 @@ from django.db import models
 from django.core.management import call_command
 from django.db import connection
 from django.conf import settings
-from wagtail.wagtailcore.signals import page_published
+
+try:
+    from wagtail.wagtailcore.signals import page_published
+except ImportError:  # Wagtail < 2.0
+    from wagtail.core.signals import page_published
 
 
 class Deployment(models.Model):
