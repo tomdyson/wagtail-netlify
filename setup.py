@@ -31,6 +31,6 @@ setup(
     zip_safe=False,
     install_requires=[
         "wagtail>=1.6",
-        "wagtail-bakery>=0.1.0"
+        "wagtail-bakery>=0.3.0"
     ],
 )
