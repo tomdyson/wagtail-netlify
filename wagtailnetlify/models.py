@@ -26,7 +26,7 @@ def postpone(function):
 def deploy(sender, **kwargs):
     """ build static pages, then send incremental changes to netlify """
     call_command('build')
-    call_command('netlify')
+    call_command('netlify', '--no-confirmation')
     connection.close()
 
 if hasattr(settings, 'NETLIFY_AUTO_DEPLOY') and settings.NETLIFY_AUTO_DEPLOY == False:

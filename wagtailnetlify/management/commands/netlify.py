@@ -10,6 +10,14 @@ class Command(BaseCommand):
 
     help = 'Deploys your baked Wagtail site to Netlify'
 
+    def add_arguments(self, parser):
+        parser.add_argument(
+            '--no-confirmation',
+            dest='no_confirmation',
+            action='store_true',
+            default=False,
+        )
+
     def build_redirects(self):
         # Redirects are configured in a file called '_redirects' at the root of the build directory
         if not hasattr(settings,'BUILD_DIR'):
@@ -28,7 +36,7 @@ class Command(BaseCommand):
         fo.close()
         self.stdout.write("Written %s redirect(s) to %s" % (count, redirect_file))
 
-    def deploy(self):
+    def deploy(self, no_confirmation):
         # Deploy the contents of BUILD_DIR to Netlify, using site ID if available
         if not hasattr(settings,'NETLIFY_PATH'):
             raise CommandError('NETLIFY_PATH is not defined in settings')
@@ -38,13 +46,19 @@ class Command(BaseCommand):
 
         netlify_cli = settings.NETLIFY_PATH
         command = [netlify_cli, 'deploy', '--publish-directory', settings.BUILD_DIR]
+
         if hasattr(settings, 'NETLIFY_SITE_ID'):
             command.extend(['--site-id', settings.NETLIFY_SITE_ID])
+
         token = getattr(settings, 'NETLIFY_API_TOKEN', None)
         if token:
             command.extend(['--access-token', token])
+
+        if no_confirmation:
+            command.append('--yes')
+
         subprocess.call(command)
 
     def handle(self, *args, **options):
         self.build_redirects()
-        self.deploy()
+        self.deploy(no_confirmation=options['no_confirmation'])
