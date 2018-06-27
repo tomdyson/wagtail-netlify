@@ -13,10 +13,12 @@ setup(
     classifiers=[
         "Environment :: Web Environment",
         "Framework :: Django",
+        "Framework :: Wagtail",
+        "Framework :: Wagtail :: 1",
         "Intended Audience :: Developers",
         "Operating System :: OS Independent",
         "Programming Language :: Python",
-        'Topic :: Internet :: WWW/HTTP',
+        "Topic :: Internet :: WWW/HTTP",
         "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
     ],
     keywords='development',
