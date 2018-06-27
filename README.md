@@ -45,10 +45,3 @@ url(r'^netlify/', netlify_views.success_hook, name='netlify'),
 ```
 
 In Netlify's admin interface for your app, add http://yourdomain/netlify/success as a URL to notify for the outgoing webhook on 'Deploy succeeded' events (in Settings / Build & deploy / Deploy notifications).
-
-## Todo
-
-- [x] Provide an admin view for reporting on deployments
-- [ ] Allow adminstrators to trigger deploys manually
-- [ ] Allow developers to replace `Threading` with Celery or similar, for more robust async behaviour.
-- [ ] Tests
