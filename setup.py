@@ -1,11 +1,15 @@
 from setuptools import setup, find_packages
 from wagtailnetlify import __version__
 
+with open('README.md', 'r') as fh:
+    long_description = fh.read()
+
 setup(
     name='wagtailnetlify',
     version=__version__,
     description='Deploy Wagtail sites to Netlify',
-    long_description='See https://github.com/tomdyson/wagtail-netlify for details',
+    long_description=long_description,
+    long_description_content_type="text/markdown",
     url='https://github.com/tomdyson/wagtail-netlify',
     author='Tom Dyson',
     author_email='tom+wagtailnetlify@torchbox.com',
