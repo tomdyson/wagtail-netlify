@@ -45,3 +45,17 @@ url(r'^netlify/', netlify_views.success_hook, name='netlify'),
 ```
 
 In Netlify's admin interface for your app, add http://yourdomain/netlify/success as a URL to notify for the outgoing webhook on 'Deploy succeeded' events (in Settings / Build & deploy / Deploy notifications).
+
+## Development
+
+### Releases
+
+1. Ensure you have the latest versions of `pip`, `setuptools` and `twine` installed in your virtual environment.
+1. Create a new branch (e.g. `release/v1.1.3`) for the release of the new version.
+1. Update the version number in `wagtailnetlify/__init__.py` following [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
+1. Update `CHANGELOG.md`.
+1. On GitHub, create a pull request and squash merge it.
+1. Checkout and pull the `master` branch locally.
+1. (Optional) If you need to verify anything, use `make publish-test` to upload to https://test.pypi.org and enter your PyPi *test* credentials as needed.
+1. Use `make publish` and enter your PyPi credentials as needed.
+1. On GitHub, create a release and a tag for the new version.
