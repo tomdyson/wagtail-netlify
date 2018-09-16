@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](https://github.com/tomdyson/wagtail-netlify/compare/v0.1...HEAD)
 
+### Fixed
+
+- Prevent modification of Deployment objects #2
+
 ## [v0.1](https://github.com/tomdyson/wagtail-netlify/compare/f8f45701f43e28e238fc64aceea07dd1900343fc...v0.1)
 
 Initial Release
