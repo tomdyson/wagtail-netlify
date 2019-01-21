@@ -1,3 +1,4 @@
+from django.conf import settings
 from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
 from wagtail.contrib.modeladmin.helpers import PermissionHelper
 from wagtailnetlify.models import Deployment
@@ -23,4 +24,6 @@ class DeploymentAdmin(ModelAdmin):
     inspect_view_enabled=True
     permission_helper_class = DeploymentPermissionHelper
 
-modeladmin_register(DeploymentAdmin)
+
+if 'wagtail.contrib.modeladmin' in settings.INSTALLED_APPS:
+    modeladmin_register(DeploymentAdmin)
