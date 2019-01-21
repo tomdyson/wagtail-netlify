@@ -1,5 +1,7 @@
 # wagtail-netlify
 
+[![PyPI version](https://badge.fury.io/py/wagtailnetlify.svg)](https://badge.fury.io/py/wagtailnetlify)
+
 Deploy your Wagtail site on Netlify. Features include:
 
  - automatic deployment when pages are published
