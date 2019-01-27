@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
-- Wagtail 2.0 compatibility
+- Wagtail 2.0 compatibility #4
 
 ### Fixed
 
