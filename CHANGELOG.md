@@ -8,7 +8,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](https://github.com/tomdyson/wagtail-netlify/compare/v0.2...HEAD)
 
-...
+### Added
+
+- Netlify-cli 2.x compatibility
+
+### Removed
+
+- Netlify-cli 1.x compatibility
 
 ## [v0.2](https://github.com/tomdyson/wagtail-netlify/compare/v0.1...v0.2)
 

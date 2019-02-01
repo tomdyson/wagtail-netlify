@@ -41,12 +41,13 @@ class Command(BaseCommand):
         deployment.save()
 
         netlify_cli = settings.NETLIFY_PATH
-        command = [netlify_cli, 'deploy', '-p', settings.BUILD_DIR]
+        command = [netlify_cli, 'deploy', '-d', settings.BUILD_DIR]
         if hasattr(settings, 'NETLIFY_SITE_ID'):
             command.extend(['-s', settings.NETLIFY_SITE_ID])
         token = getattr(settings, 'NETLIFY_API_TOKEN', None)
         if token:
-            command.extend(['-t', token])
+            command.extend(['-a', token])
+        command.append('--prod')
         subprocess.call(command)
 
     def handle(self, *args, **options):

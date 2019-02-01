@@ -13,7 +13,7 @@ Deploy your Wagtail site on Netlify. Features include:
 ## Install
 
 1. Install and configure [Wagtail Bakery](https://github.com/moorinteractive/wagtail-bakery), if you haven't already
-2. Install [Netlify](https://www.netlify.com/docs/cli/#installation), if you haven't already
+2. Install [Netlify v2.x](https://www.netlify.com/docs/cli/#installation), if you haven't already
 3. Install the project with `pip install wagtailnetlify`.
 
 ## Configure
