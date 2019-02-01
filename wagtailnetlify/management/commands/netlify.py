@@ -33,21 +33,30 @@ class Command(BaseCommand):
         self.stdout.write("Written %s redirect(s) to %s" % (count, redirect_file))
 
     def deploy(self):
-        # Deploy the contents of BUILD_DIR to Netlify, using site ID if available
-        if not hasattr(settings,'NETLIFY_PATH'):
+        """
+        Deploy the contents of `BUILD_DIR` to Netlify,
+        using `NETLIFY_SITE_ID` and `NETLIFY_API_TOKEN` if available.
+        """
+
+        netlify_cli = getattr(settings, 'NETLIFY_PATH', None)
+        if not netlify_cli:
             raise CommandError('NETLIFY_PATH is not defined in settings')
 
         deployment = Deployment()
         deployment.save()
 
-        netlify_cli = settings.NETLIFY_PATH
-        command = [netlify_cli, 'deploy', '-d', settings.BUILD_DIR]
-        if hasattr(settings, 'NETLIFY_SITE_ID'):
-            command.extend(['-s', settings.NETLIFY_SITE_ID])
-        token = getattr(settings, 'NETLIFY_API_TOKEN', None)
-        if token:
-            command.extend(['-a', token])
+        command = [netlify_cli, 'deploy']
+        command.append('--dir={}'.format(settings.BUILD_DIR))
         command.append('--prod')
+
+        site_id = getattr(settings, 'NETLIFY_SITE_ID', None)
+        if site_id:
+            command.append('--site={}'.format(site_id))
+
+        auth_token = getattr(settings, 'NETLIFY_API_TOKEN', None)
+        if auth_token:
+            command.append('--auth={}'.format(auth_token))
+
         subprocess.call(command)
 
     def handle(self, *args, **options):
