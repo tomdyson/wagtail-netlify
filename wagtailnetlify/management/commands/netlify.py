@@ -48,6 +48,7 @@ class Command(BaseCommand):
         command = [netlify_cli, 'deploy']
         command.append('--dir={}'.format(settings.BUILD_DIR))
         command.append('--prod')
+        command.append('--message="Wagtail Deployment #{}"'.format(deployment.pk))
 
         site_id = getattr(settings, 'NETLIFY_SITE_ID', None)
         if site_id:
