@@ -10,11 +10,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
-- Netlify-cli 2.x compatibility
+- Netlify-cli 2.x compatibility #13
+- Possibility to define custom deployments function #8
 
 ### Removed
 
-- Netlify-cli 1.x compatibility
+- Netlify-cli 1.x compatibility #13
 
 ## [v0.2](https://github.com/tomdyson/wagtail-netlify/compare/v0.1...v0.2)
 

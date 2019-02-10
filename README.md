@@ -25,7 +25,8 @@ Deploy your Wagtail site on Netlify. Features include:
 
 ### Optional
 - If you are deploying to an existing Netlify site, provide its ID with `NETLIFY_SITE_ID = 'your-id-here'`
-- If you don't want Wagtail to deploy your site to Netlify every time you publish a page, set `NETLIFY_AUTO_DEPLOY = False`
+- If you don't want Wagtail to deploy your site to Netlify every time you publish a page, set `NETLIFY_AUTO_DEPLOY = False`.
+- If you would like to use your own task runner, set `NETLIFY_DEPLOY_FUNCTION` to the dotted path of the function to be called when a deploy is triggered. The function needs to be a valid [Django signal receiver](https://docs.djangoproject.com/en/2.1/topics/signals/#receiver-functions).
 - If you don't want to or are unable to click the Netlify authentication link in the console, [generate a token](https://app.netlify.com/account/applications) manually and set `NETLIFY_API_TOKEN = 'your-token-here'` in your settings. *Warning: You should never check credentials in your version control system. Use [environment variables](https://django-environ.readthedocs.io/en/latest/) or [local settings file](http://techstream.org/Bits/Local-Settings-in-django) instead.*
 
 ## Usage

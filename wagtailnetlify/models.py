@@ -3,6 +3,7 @@ from django.db import models
 from django.core.management import call_command
 from django.db import connection
 from django.conf import settings
+from django.utils.module_loading import import_string
 
 try:
     from wagtail.wagtailcore.signals import page_published
@@ -38,7 +39,8 @@ def deploy(sender, **kwargs):
     call_command('netlify')
     connection.close()
 
-if hasattr(settings, 'NETLIFY_AUTO_DEPLOY') and settings.NETLIFY_AUTO_DEPLOY == False:
-    pass
-else:
-    page_published.connect(deploy)
+
+if getattr(settings, 'NETLIFY_AUTO_DEPLOY', False) == True:
+    function_path = getattr(settings, 'NETLIFY_DEPLOY_FUNCTION', 'wagtailnetlify.models.deploy')
+    function = import_string(function_path)
+    page_published.connect(function)
