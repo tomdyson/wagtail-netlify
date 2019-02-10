@@ -19,16 +19,21 @@ class Deployment(models.Model):
 
 
 def postpone(function):
-    """ cheap aysnc, see https://stackoverflow.com/a/28913218 """
+    """
+    Cheap aysnc, see https://stackoverflow.com/a/28913218
+    """
     def decorator(*args, **kwargs):
-        t = Thread(target = function, args=args, kwargs=kwargs)
+        t = Thread(target=function, args=args, kwargs=kwargs)
         t.daemon = True
         t.start()
     return decorator
 
+
 @postpone
 def deploy(sender, **kwargs):
-    """ build static pages, then send incremental changes to netlify """
+    """
+    Build static pages, then send incremental changes to netlify.
+    """
     call_command('build')
     call_command('netlify')
     connection.close()
