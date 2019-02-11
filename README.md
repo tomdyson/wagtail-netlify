@@ -10,34 +10,70 @@ Deploy your Wagtail site on Netlify. Features include:
 
 ![Screencast demo](https://tom.s3.amazonaws.com/wagtail-netlify.gif)
 
-## Install
+## Installation
 
-1. Install and configure [Wagtail Bakery](https://github.com/moorinteractive/wagtail-bakery), if you haven't already
-2. Install [Netlify v2.x](https://www.netlify.com/docs/cli/#installation), if you haven't already
-3. Install the project with `pip install wagtailnetlify`.
+1. Install and configure [Wagtail Bakery](https://github.com/moorinteractive/wagtail-bakery), if you haven't already.
+2. Install [Netlify CLI v2.x](https://www.netlify.com/docs/cli/#installation), if you haven't already.
+3. Install Wagtail-Netlify via pip (with `pip install wagtailnetlify`).
 
-## Configure
+## Configuration
 
-### Mandatory
-1. Add `'wagtailnetlify'` to your `INSTALLED_APPS`
-2. Run the migrations: `./manage.py migrate wagtailnetlify`
-3. Add `NETLIFY_PATH` to your settings (hint: type `which netlify` to check the location)
+1. Add `wagtailnetlify` to your `INSTALLED_APPS`.
+2. Run the migrations: `./manage.py migrate wagtailnetlify`.
+3. Add `NETLIFY_PATH` to your settings.
 
-### Optional
-- If you are deploying to an existing Netlify site, provide its ID with `NETLIFY_SITE_ID = 'your-id-here'`
-- If you don't want Wagtail to deploy your site to Netlify every time you publish a page, set `NETLIFY_AUTO_DEPLOY = False`.
-- If you would like to use your own task runner, set `NETLIFY_DEPLOY_FUNCTION` to the dotted path of the function to be called when a deploy is triggered. The function needs to be a valid [Django signal receiver](https://docs.djangoproject.com/en/2.1/topics/signals/#receiver-functions).
-- If you don't want to or are unable to click the Netlify authentication link in the console, [generate a token](https://app.netlify.com/account/applications) manually and set `NETLIFY_API_TOKEN = 'your-token-here'` in your settings. *Warning: You should never check credentials in your version control system. Use [environment variables](https://django-environ.readthedocs.io/en/latest/) or [local settings file](http://techstream.org/Bits/Local-Settings-in-django) instead.*
+Check the [Settings](#settings) section below for more customisation options.
 
 ## Usage
 
-1. If you haven't set `NETLIFY_AUTO_DEPLOY = False`, Wagtail will automatically deploy your site every time a page is published. This make take between a few seconds and a few minutes, depending on the size of your site, and the number of pages which are affected by your change.
-2. To deploy changes manually, use `./manage.py netlify`
+If `NETLIFY_AUTO_DEPLOY` is set to `True`, Wagtail will automatically deploy your site every time a page is published.
 
-## Optional admin view
+*or*
 
-Netlify can send a webhook after a successful deployment. This app provides an endpoint for that webhook and an admin view of
-completed deployments. To enable this view, add `'wagtail.contrib.modeladmin'` to your `INSTALLED_APPS` and update your project's `urls.py`:
+To deploy changes manually, use `./manage.py netlify`.
+
+## Settings
+
+### `NETLIFY_PATH`
+
+The path to the Netlify CLI. *Hint: type `which netlify` to check the location.*
+
+### `NETLIFY_SITE_ID`
+
+**Default: `None`**
+
+If set, deploy to that specific Netlify site.
+
+If not set, the Netlify CLI might prompt you to select one.
+
+### `NETLIFY_API_TOKEN`
+
+**Default: `None`**
+
+If set, the Netlify CLI will not prompt you to click the authentication link in the console. It can be useful when deployed to a remote server where you don't see the console output.
+
+Connect to your Netlify account to [generate a token](https://app.netlify.com/account/applications) and then set the settings. *Warning: You should never check credentials in your version control system. Use [environment variables](https://django-environ.readthedocs.io/en/latest/) or [local settings file](http://techstream.org/Bits/Local-Settings-in-django) instead.*
+
+### `NETLIFY_AUTO_DEPLOY`
+
+**Default: `True`**
+
+Whether to automatically deploy your site to Netlify every time you publish a page. This make take between a few seconds and a few minutes, depending on the size of your site, and the number of pages which are affected by your change.
+
+### `NETLIFY_DEPLOY_FUNCTION`
+
+**Default: `wagtailnetlify.models.deploy`**
+
+The function to be called when a deploy is triggered (excluding when triggered manually with the `./manage.py netlify` command). It can be useful if you want to use your own task runner (like Celery) instead of the built-in threading model.
+
+The function needs to be a valid [Django signal receiver](https://docs.djangoproject.com/en/2.1/topics/signals/#receiver-functions).
+
+### Optional admin view
+
+Netlify can send a webhook after a successful deployment. This app provides an endpoint for that webhook and an admin view of completed deployments. To enable this view:
+
+1. Add `wagtail.contrib.modeladmin` to your `INSTALLED_APPS`
+1. Update your project's `urls.py`:
 
 ```python
 # in your imports
@@ -47,7 +83,9 @@ from wagtailnetlify import views as netlify_views
 url(r'^netlify/', netlify_views.success_hook, name='netlify'),
 ```
 
-In Netlify's admin interface for your app, add http://yourdomain/netlify/success as a URL to notify for the outgoing webhook on 'Deploy succeeded' events (in Settings / Build & deploy / Deploy notifications).
+3. In Netlify's admin interface for your app, add http://yourdomain/netlify/success as a URL to notify for the outgoing webhook on *Deploy succeeded* events (in Settings / Build & deploy / Deploy notifications).
+
+The view will be available under `Settings / Deployments` in your site's admin.
 
 ## Development
 
