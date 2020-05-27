@@ -30,7 +30,7 @@ If `NETLIFY_AUTO_DEPLOY` is set to `True`, Wagtail will automatically deploy you
 
 *or*
 
-To deploy changes manually, use `./manage.py netlify`.
+To deploy changes manually, use `./manage.py netlify`. To generate redirects without deploying, use the `-n` or `--no-deploy` flag: `./manage.py netlify --no-deploy`
 
 ## Settings
 
