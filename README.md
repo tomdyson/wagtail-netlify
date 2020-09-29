@@ -68,7 +68,7 @@ The function to be called when a deploy is triggered (excluding when triggered m
 
 The function needs to be a valid [Django signal receiver](https://docs.djangoproject.com/en/2.1/topics/signals/#receiver-functions).
 
-### Optional admin view
+### Optional admin view and endpoints
 
 Netlify can send a webhook after a successful deployment. This app provides an endpoint for that webhook and an admin view of completed deployments. To enable this view:
 
@@ -77,15 +77,17 @@ Netlify can send a webhook after a successful deployment. This app provides an e
 
 ```python
 # in your imports
-from wagtailnetlify import views as netlify_views
+from wagtailnetlify import urls as netlify_urls
 
 # in urlpatterns, before including wagtail_urls
-url(r'^netlify/', netlify_views.success_hook, name='netlify'),
+url(r"^netlify/", include(netlify_urls)),
 ```
 
 3. In Netlify's admin interface for your app, add http://yourdomain/netlify/success as a URL to notify for the outgoing webhook on *Deploy succeeded* events (in Settings / Build & deploy / Deploy notifications).
 
 The view will be available under `Settings / Deployments` in your site's admin.
+
+Including the `wagtailnetlify` URLs will also enable a view at /netlify/redirects, which outputs any Wagtail redirects in [Netlify's plain text format](https://docs.netlify.com/routing/redirects/#syntax-for-the-redirects-file). This may be useful if you are using Netlify to host a headless front-end for your Wagtail site.
 
 ## Development
 
