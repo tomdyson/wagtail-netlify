@@ -10,25 +10,30 @@ except ImportError:  # Wagtail < 2.0
     from wagtail.wagtailredirects.models import Redirect
 
 
+def build_redirects():
+    out = "# Redirects from what the browser requests to what we serve\n"
+    count = 0
+    for redirect in Redirect.objects.all():
+        status_code = "302"
+        if redirect.is_permanent:
+            status_code = "301"
+        out += "%s\t%s\t%s\n" % (redirect.old_path, redirect.link, status_code)
+        count += 1
+    return out, count
+
+
 class Command(BaseCommand):
 
     help = "Deploys your baked Wagtail site to Netlify"
 
-    def build_redirects(self):
+    def write_redirects(self):
         # Redirects are configured in a file called '_redirects' at the root of the build directory
         if not hasattr(settings, "BUILD_DIR"):
             raise CommandError("BUILD_DIR is not defined in settings")
         redirect_file = os.path.join(settings.BUILD_DIR, "_redirects")
+        redirects_str, count = build_redirects()
         fo = open(redirect_file, "w")
-        fo.write("# Redirects from what the browser requests to what we serve\n")
-        # for each redirect, write old path, new url, status code
-        count = 0
-        for redirect in Redirect.objects.all():
-            status_code = "302"
-            if redirect.is_permanent:
-                status_code = "301"
-            fo.write("%s\t%s\t%s\n" % (redirect.old_path, redirect.link, status_code))
-            count += 1
+        fo.write(redirects_str)
         fo.close()
         self.stdout.write("Written %s redirect(s) to %s" % (count, redirect_file))
 
@@ -67,6 +72,6 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         no_deploy = kwargs["no_deploy"]
-        self.build_redirects()
+        self.write_redirects()
         if not no_deploy:
             self.deploy()
