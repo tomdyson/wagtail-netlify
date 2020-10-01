@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 ...
 
+## v0.6
+
+### Added
+
+- A command option for triggering builds on Netlify
+
 ## v0.5
 
 ### Added

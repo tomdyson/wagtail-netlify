@@ -30,7 +30,7 @@ If `NETLIFY_AUTO_DEPLOY` is set to `True`, Wagtail will automatically deploy you
 
 *or*
 
-To deploy changes manually, use `./manage.py netlify`. To generate redirects without deploying, use the `-n` or `--no-deploy` flag: `./manage.py netlify --no-deploy`
+To deploy changes manually, use `./manage.py netlify`. To generate redirects without deploying, use the `-n` or `--no-deploy` flag: `./manage.py netlify --no-deploy`. To trigger a build on Netlify's servers, configure `settings.NETLIFY_BUILD_HOOK` and use the `-t` or `--trigger-build` flag: `./manage.py netlify --trigger-build`.
 
 ## Settings
 
@@ -67,6 +67,14 @@ Whether to automatically deploy your site to Netlify every time you publish a pa
 The function to be called when a deploy is triggered (excluding when triggered manually with the `./manage.py netlify` command). It can be useful if you want to use your own task runner (like Celery) instead of the built-in threading model.
 
 The function needs to be a valid [Django signal receiver](https://docs.djangoproject.com/en/2.1/topics/signals/#receiver-functions).
+
+### `NETLIFY_BUILD_HOOK`
+
+**Default: `None`**
+
+The URL of a Netlify build hook. If provided, `./manage.py netlify --trigger-build` will call this hook, triggering a build
+on Netlify's servers. This may be useful if you have a headless front-end on Netlify which handles its own static site generation, 
+e.g. Nuxt, Next or Gatsby. See https://docs.netlify.com/configure-builds/build-hooks/ for more details.
 
 ### Optional admin view and endpoints
 
