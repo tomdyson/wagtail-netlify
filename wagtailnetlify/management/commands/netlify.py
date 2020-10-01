@@ -1,5 +1,6 @@
 import os
 import subprocess
+import requests
 from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
 from wagtailnetlify.models import Deployment
@@ -27,7 +28,9 @@ class Command(BaseCommand):
     help = "Deploys your baked Wagtail site to Netlify"
 
     def write_redirects(self):
-        # Redirects are configured in a file called '_redirects' at the root of the build directory
+        """ Redirects are configured in a file called '_redirects'
+            at the root of the build directory
+        """
         if not hasattr(settings, "BUILD_DIR"):
             raise CommandError("BUILD_DIR is not defined in settings")
         redirect_file = os.path.join(settings.BUILD_DIR, "_redirects")
@@ -35,7 +38,18 @@ class Command(BaseCommand):
         fo = open(redirect_file, "w")
         fo.write(redirects_str)
         fo.close()
-        self.stdout.write("Written %s redirect(s) to %s" % (count, redirect_file))
+        self.stdout.write("Written %s redirect(s)" % (count)
+
+    def trigger_build(self):
+        """
+        Trigger a Netlify build using build hooks
+        https://docs.netlify.com/configure-builds/build-hooks/
+        """
+        netlify_build_hook = getattr(settings, "NETLIFY_BUILD_HOOK", None)
+        if not netlify_build_hook:
+            raise CommandError("NETLIFY_BUILD_HOOK is not defined in settings")
+        requests.post(url=netlify_build_hook)
+        self.stdout.write("Netlify build triggered")
 
     def deploy(self):
         """
@@ -67,11 +81,22 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument(
-            "-n", "--no-deploy", action="store_true", help="Do not deploy"
+            "-n", "--no-deploy",
+            action="store_true",
+            help="Do not deploy"
+        )
+        parser.add_argument(
+            "-t", "--trigger-build",
+            action="store_true",
+            help="Trigger build on Netlify"
         )
 
     def handle(self, *args, **kwargs):
         no_deploy = kwargs["no_deploy"]
-        self.write_redirects()
-        if not no_deploy:
-            self.deploy()
+        trigger = kwargs["trigger_build"]
+        if trigger:
+            self.trigger_build()
+        else:
+            self.write_redirects()
+            if not no_deploy:
+                self.deploy()
