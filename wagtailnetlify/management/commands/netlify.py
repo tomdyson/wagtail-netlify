@@ -38,7 +38,7 @@ class Command(BaseCommand):
         fo = open(redirect_file, "w")
         fo.write(redirects_str)
         fo.close()
-        self.stdout.write("Written %s redirect(s)" % (count)
+        self.stdout.write("Written %s redirect(s)" % (count))
 
     def trigger_build(self):
         """
