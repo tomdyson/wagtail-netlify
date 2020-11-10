@@ -20,7 +20,7 @@ Deploy your Wagtail site on Netlify. Features include:
 
 1. Add `wagtailnetlify` to your `INSTALLED_APPS`.
 2. Run the migrations: `./manage.py migrate wagtailnetlify`.
-3. Add `NETLIFY_PATH` to your settings.
+3. Add `NETLIFY_PATH` or `NETLIFY_BUILD_HOOK` to your settings.
 
 Check the [Settings](#settings) section below for more customisation options.
 
@@ -30,7 +30,11 @@ If `NETLIFY_AUTO_DEPLOY` is set to `True`, Wagtail will automatically deploy you
 
 *or*
 
-To deploy changes manually, use `./manage.py netlify`. To generate redirects without deploying, use the `-n` or `--no-deploy` flag: `./manage.py netlify --no-deploy`. To trigger a build on Netlify's servers, configure `settings.NETLIFY_BUILD_HOOK` and use the `-t` or `--trigger-build` flag: `./manage.py netlify --trigger-build`.
+To deploy changes manually, use `./manage.py netlify`. 
+
+To generate redirects without deploying, use the `-n` or `--no-deploy` flag: `./manage.py netlify --no-deploy`. 
+
+To trigger a build on Netlify's servers, configure `settings.NETLIFY_BUILD_HOOK` and use the `-t` or `--trigger-build` flag: `./manage.py netlify --trigger-build`.
 
 ## Settings
 
@@ -56,9 +60,9 @@ Connect to your Netlify account to [generate a token](https://app.netlify.com/ac
 
 ### `NETLIFY_AUTO_DEPLOY`
 
-**Default: `True`**
+**Default: `False`**
 
-Whether to automatically deploy your site to Netlify every time you publish a page. This make take between a few seconds and a few minutes, depending on the size of your site, and the number of pages which are affected by your change.
+Whether to automatically deploy your site to Netlify every time you publish a page. This make take between a few seconds and a few minutes, depending on the size of your site, and the number of pages which are affected by your change. If you have configured `settings.NETLIFY_BUILD_HOOK`, publishing a page will trigger a build on Netlify's servers.
 
 ### `NETLIFY_DEPLOY_FUNCTION`
 
