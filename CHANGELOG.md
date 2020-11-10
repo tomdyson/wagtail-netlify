@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 ...
 
+## v0.7
+
+### Added
+
+- Support triggering builds on Netlify automatically
+
 ## v0.6
 
 ### Added
