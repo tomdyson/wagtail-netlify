@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 
 ...
 
+## v0.8
+
+Significant update, with backwards-incompatible changes. 
+The `Deployment` model has been removed, in favour of direct 
+integration with the Netlify API. A new view for Wagtail 
+administrators lists the last ten builds, with the option of 
+triggering new builds.
+
+### Added
+
+- Admin UI integration with the Netlify build API
+
 ## v0.7
 
 ### Added

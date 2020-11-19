@@ -19,7 +19,7 @@ def get_site_name():
 def netlify_deploys():
     site_name = get_site_name()
     deploys_listing_url = (
-        API_ROOT + "sites/" + settings.NETLIFY_SITE_ID + "/deploys?per_page=5"
+        API_ROOT + "sites/" + settings.NETLIFY_SITE_ID + "/deploys?per_page=10"
     )
     deploys = requests.get(deploys_listing_url, headers=HEADERS).json()
 
