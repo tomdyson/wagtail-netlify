@@ -3,7 +3,6 @@ import subprocess
 import requests
 from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
-from wagtailnetlify.models import Deployment
 
 try:
     from wagtail.contrib.redirects.models import Redirect
@@ -25,19 +24,18 @@ def build_redirects():
 
 class Command(BaseCommand):
 
-    help = "Deploys your baked Wagtail site to Netlify"
+    help = "Deploys your site to Netlify, or triggers a build"
 
     def write_redirects(self):
-        """ Redirects are configured in a file called '_redirects'
-            at the root of the build directory
+        """Redirects are configured in a file called '_redirects'
+        at the root of the build directory
         """
         if not hasattr(settings, "BUILD_DIR"):
             raise CommandError("BUILD_DIR is not defined in settings")
         redirect_file = os.path.join(settings.BUILD_DIR, "_redirects")
         redirects_str, count = build_redirects()
-        fo = open(redirect_file, "w")
-        fo.write(redirects_str)
-        fo.close()
+        with open(redirect_file, "w") as fo:
+            fo.write(redirects_str)
         self.stdout.write("Written %s redirect(s)" % (count))
 
     def trigger_build(self):
@@ -61,13 +59,13 @@ class Command(BaseCommand):
         if not netlify_cli:
             raise CommandError("NETLIFY_PATH is not defined in settings")
 
-        deployment = Deployment()
-        deployment.save()
-
-        command = [netlify_cli, "deploy"]
-        command.append("--dir={}".format(settings.BUILD_DIR))
-        command.append("--prod")
-        command.append('--message="Wagtail Deployment #{}"'.format(deployment.pk))
+        command = [
+            netlify_cli,
+            "deploy",
+            "--dir={}".format(settings.BUILD_DIR),
+            "--prod",
+            '--message="Wagtail Deployment #{}"'.format(deployment.pk),
+        ]
 
         site_id = getattr(settings, "NETLIFY_SITE_ID", None)
         if site_id:
@@ -81,22 +79,21 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument(
-            "-n", "--no-deploy",
-            action="store_true",
-            help="Do not deploy"
+            "-n", "--no-deploy", action="store_true", help="Do not deploy"
         )
         parser.add_argument(
-            "-t", "--trigger-build",
+            "-t",
+            "--trigger-build",
             action="store_true",
-            help="Trigger build on Netlify"
+            help="Trigger build on Netlify",
         )
 
     def handle(self, *args, **kwargs):
-        no_deploy = kwargs["no_deploy"]
         trigger = kwargs["trigger_build"]
         if trigger:
             self.trigger_build()
         else:
             self.write_redirects()
+            no_deploy = kwargs["no_deploy"]
             if not no_deploy:
                 self.deploy()
