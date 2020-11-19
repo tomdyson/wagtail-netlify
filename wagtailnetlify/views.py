@@ -1,8 +1,5 @@
-import json
 from django.http import HttpResponse
-from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, redirect
-from django.utils import timezone
 from wagtailnetlify.management.commands.netlify import build_redirects
 from .utils import netlify_deploys
 from .models import deploy

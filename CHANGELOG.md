@@ -16,6 +16,10 @@ triggering new builds.
 
 - Admin UI integration with the Netlify build API
 
+### Removed
+
+- Support for Wagtail < 2
+
 ## v0.7
 
 ### Added

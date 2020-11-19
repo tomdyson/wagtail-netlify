@@ -3,11 +3,7 @@ import subprocess
 import requests
 from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
-
-try:
-    from wagtail.contrib.redirects.models import Redirect
-except ImportError:  # Wagtail < 2.0
-    from wagtail.wagtailredirects.models import Redirect
+from wagtail.contrib.redirects.models import Redirect
 
 
 def build_redirects():
@@ -64,7 +60,7 @@ class Command(BaseCommand):
             "deploy",
             "--dir={}".format(settings.BUILD_DIR),
             "--prod",
-            '--message="Wagtail Deployment #{}"'.format(deployment.pk),
+            '--message="Wagtail Deployment"',
         ]
 
         site_id = getattr(settings, "NETLIFY_SITE_ID", None)
