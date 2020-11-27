@@ -21,4 +21,4 @@ def list_deploys(request):
 
 def do_deploy(request):
     deploy()  # non-async deploy
-    return redirect(list_deploys)
+    return redirect("list_deploys")
