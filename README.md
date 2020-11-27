@@ -4,7 +4,9 @@
 
 Deploy your Wagtail site on Netlify. Features include:
 
- - automatic deployment when pages are published
+ - the ability to build locally and push them to Netlify, or trigger builds on Netlify's servers
+ - (optional) automatic deployment when pages are published
+ - an admin UI for viewing and creating Netlify builds
  - a new `netlify` management command
  - conversion of Wagtail redirects to Netlify's format
 
@@ -48,13 +50,13 @@ The path to the Netlify CLI. *Hint: type `which netlify` to check the location.*
 
 If set, deploy to that specific Netlify site.
 
-If not set, the Netlify CLI might prompt you to select one.
+If not set, the Netlify CLI might prompt you to select one. This setting is required for the admin view.
 
 ### `NETLIFY_API_TOKEN`
 
 **Default: `None`**
 
-If set, the Netlify CLI will not prompt you to click the authentication link in the console. It can be useful when deployed to a remote server where you don't see the console output.
+If set, the Netlify CLI will not prompt you to click the authentication link in the console. It can be useful when deployed to a remote server where you don't see the console output. This setting is required for the admin view.
 
 Connect to your Netlify account to [generate a token](https://app.netlify.com/account/applications) and then set the settings. *Warning: You should never check credentials in your version control system. Use [environment variables](https://django-environ.readthedocs.io/en/latest/) or [local settings file](http://techstream.org/Bits/Local-Settings-in-django) instead.*
 
@@ -80,12 +82,17 @@ The URL of a Netlify build hook. If provided, `./manage.py netlify --trigger-bui
 on Netlify's servers. This may be useful if you have a headless front-end on Netlify which handles its own static site generation, 
 e.g. Nuxt, Next or Gatsby. See https://docs.netlify.com/configure-builds/build-hooks/ for more details.
 
-### Optional admin view and endpoints
+### Admin view
 
-Netlify can send a webhook after a successful deployment. This app provides an endpoint for that webhook and an admin view of completed deployments. To enable this view:
+This view allows Wagtail administrators to see a list of recent Netlify builds, and trigger a new one. Both `NETLIFY_API_TOKEN` and `NETLIFY_SITE_ID` should be available in settings. If `NETLIFY_BUILD_HOOK` has been set, new builds will be created by triggering a build on Netlify's servers; if not, wagtail-netlify will attempt to build the site locally and push it to Netlify.
 
-1. Add `wagtail.contrib.modeladmin` to your `INSTALLED_APPS`
-1. Update your project's `urls.py`:
+The view will be available to Wagtail administrators as a new `Netlify` menu item.
+
+### Redirects
+
+Including the `wagtailnetlify` URLs will enable a view at /netlify/redirects, which outputs any Wagtail redirects in [Netlify's plain text format](https://docs.netlify.com/routing/redirects/#syntax-for-the-redirects-file). This may be useful if you are using Netlify to host a headless front-end for your Wagtail site.
+
+To enable this view, update your project's `urls.py`:
 
 ```python
 # in your imports
@@ -95,11 +102,11 @@ from wagtailnetlify import urls as netlify_urls
 url(r"^netlify/", include(netlify_urls)),
 ```
 
-3. In Netlify's admin interface for your app, add http://yourdomain/netlify/success as a URL to notify for the outgoing webhook on *Deploy succeeded* events (in Settings / Build & deploy / Deploy notifications).
+To include the generated redirects in your Netlify-hosted front-end, you should fetch them from the back-end server as part of your front-end build. For example, for a Nuxt site, the build command could be:
 
-The view will be available under `Settings / Deployments` in your site's admin.
-
-Including the `wagtailnetlify` URLs will also enable a view at /netlify/redirects, which outputs any Wagtail redirects in [Netlify's plain text format](https://docs.netlify.com/routing/redirects/#syntax-for-the-redirects-file). This may be useful if you are using Netlify to host a headless front-end for your Wagtail site.
+```bash
+yarn build && yarn export && wget -O dist/_redirects https://your-wagtail-backend/netlify/redirects
+```
 
 ## Development
 
