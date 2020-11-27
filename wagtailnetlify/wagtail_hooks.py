@@ -1,29 +1,22 @@
-from django.conf import settings
-from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
-from wagtail.contrib.modeladmin.helpers import PermissionHelper
-from wagtailnetlify.models import Deployment
+from wagtail.core import hooks
+from wagtail.admin.menu import AdminOnlyMenuItem
+from django.urls import include, reverse, path
+
+from . import admin_urls
 
 
-class DeploymentPermissionHelper(PermissionHelper):
-    # remove the add Deployment button
-    def user_can_create(self, user):
-        return False
-
-    def user_can_edit_obj(self, user, obj):
-        return False
+@hooks.register("register_admin_urls")
+def register_admin_urls():
+    return [
+        path(r"netlify/", include(admin_urls)),
+    ]
 
 
-class DeploymentAdmin(ModelAdmin):
-    model = Deployment
-    menu_icon = 'success'
-    menu_order = 0
-    add_to_settings_menu = True
-    exclude_from_explorer = False
-    list_display = ('datetime_started', 'datetime_finished', 'deployment_url', 'url')
-    list_filter = ('datetime_started',)
-    inspect_view_enabled=True
-    permission_helper_class = DeploymentPermissionHelper
-
-
-if 'wagtail.contrib.modeladmin' in settings.INSTALLED_APPS:
-    modeladmin_register(DeploymentAdmin)
+@hooks.register("register_admin_menu_item")
+def register_netlify_menu_item():
+    return AdminOnlyMenuItem(
+        "Netlify",
+        reverse("list_deploys"),
+        classnames="icon icon-collapse-down",
+        order=1000,
+    )
