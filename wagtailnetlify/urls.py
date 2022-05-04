@@ -1,4 +1,4 @@
-from django.conf.urls import url
+from django.urls import re_path
 from wagtailnetlify.views import redirects
 
-urlpatterns = [url(r"^redirects$", redirects, name="redirect_builder")]
+urlpatterns = [re_path(r"^redirects$", redirects, name="redirect_builder")]
