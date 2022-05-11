@@ -1,0 +1,63 @@
+{% extends "wagtailadmin/base.html" %}
+
+{% block titletag %}Netlify deployments{% endblock %}
+
+{% block content %}
+{% block header %}
+<header class="nice-padding hasform">
+    <div class="row header-title">
+        <div class="left">
+            <div class="col">
+                <h1>
+                    <svg class="icon icon-collapse-up header-title-icon" aria-hidden="true" focusable="false">
+                        <use href="#icon-collapse-up"></use>
+                    </svg>
+                    Netlify Deployments</h1>
+            </div>
+        </div>
+        {% block header_extra %}
+        <div class="right">
+            <div class="actionbutton">
+                <a href="deployments/create" class="button bicolor icon icon-plus" title="New deployment">New
+                    Deployment</a>
+            </div>
+        </div>
+        {% endblock %}
+    </div>
+</header>
+{% endblock %}
+
+<div>
+    <div class="row">
+        <div class="result-list col12">
+            <table class="listing full-width">
+                <thead>
+                    <tr>
+                        <th scope="col">Deployment</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Time taken</th>
+                        <th scope="col">Started at</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for deploy in deploys %}
+                    <tr class="odd" data-object-pk="1917">
+                        <td class="nowrap"><a href="{{ deploy.deploy_ssl_url }}">{{ deploy.title }}</a>
+                            (<a href="{{ deploy.admin_url }}">logs</a>)</td>
+                        <td class="nowrap">{{ deploy.state|title }}</td>
+                        <td class="nowrap">
+                            {% if deploy.deploy_time %}
+                            {{ deploy.deploy_time }} seconds
+                            {% else %}
+                            -
+                            {% endif %}
+                        </td>
+                        <td class="nowrap">{{ deploy.created_at_parsed }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
